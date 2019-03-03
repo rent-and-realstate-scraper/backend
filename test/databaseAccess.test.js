@@ -10,7 +10,7 @@ describe('App', function () {
 
     describe('test crud operations in db', async function () {
         const db = new ScraperDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USER"], process.env["MYSQL_PASSWORD"], process.env["MYSQL_DATABASE"]);
-        db.tableCreatorScriptPath = '../scripts/initialize.sql'
+        db.tableCreatorScriptPath = './scripts/initialize.sql'
         it('should run the creation table script', async function () {
             result = await db.createTables();
             assert(result !== null);

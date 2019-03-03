@@ -1,5 +1,5 @@
 const chai = require('chai');
-const FeatureProcessorCityBoundingBox = require('../ScrapingIndexCreator');
+const FeatureProcessorCityBoundingBox = require('../scripts/ScrapingIndexCreatorBoundingBox');
 const assert = chai.assert;
 const chaiAlmost = require('chai-almost');
 chai.use(chaiAlmost(0.01));
@@ -56,7 +56,8 @@ describe('App', function () {
 
             assert(resultX !== undefined);
             expect(resultX).to.be.greaterThan(4);
-            expect(resultX).to.be.lessThan(31);
+            //expect(resultX).to.be.lessThan(31);
+            expect(resultX).to.be.lessThan(62);
 
         });
 
