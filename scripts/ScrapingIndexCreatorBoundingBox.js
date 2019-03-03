@@ -1,6 +1,8 @@
 
 const ExtractBoundingBoxScraper = require('./ExtractBoundingBoxApi')
-const ScraperDataAccess = require('./ScraperDataAccess');
+//const ScraperDataAccess = require('./ScraperDataAccess');
+const ScraperDataAccess = require('../managers/MysqlDataAccess');
+
 require('dotenv').load();
 
 module.exports = class ScrapingIndexCreator {
