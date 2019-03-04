@@ -22,9 +22,7 @@ module.exports = class ScrapingIndexCreator {
     }
 
     async regenerateScrapingIndex(){
-        for (const device of this.config.devices){
-            await this.regenerateScrapingIndexForDevice(device);
-        }
+        await Promise.all(this.config.devices.map(async device => await this.regenerateScrapingIndexForDevice(device)))
     }
 
     async regenerateScrapingIndexForDevice(device) {
