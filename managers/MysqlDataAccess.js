@@ -65,6 +65,7 @@ module.exports = class MysqlDataAccess {
         return await this.runQuery(sql);
     }
 
+
     async saveScrapingPiecesIndex(scapingPiecesIndexRecord) {
         const sql = `REPLACE INTO scraping_pieces_index 
         (piece_id, piece_name, city_name, device_id, scraped, bounding_box1_x, bounding_box1_y, bounding_box2_x, bounding_box2_y, center_point_x, center_point_y, geojson_coordinates, method) VALUES("${scapingPiecesIndexRecord.piece_id}", "${scapingPiecesIndexRecord.piece_name}", "${scapingPiecesIndexRecord.city_name}","${scapingPiecesIndexRecord.device_id}", ${scapingPiecesIndexRecord.scraped}, ${scapingPiecesIndexRecord.bounding_box1_x},  ${scapingPiecesIndexRecord.bounding_box1_y},  ${scapingPiecesIndexRecord.bounding_box2_x}, ${scapingPiecesIndexRecord.bounding_box2_y}, ${scapingPiecesIndexRecord.center_point_x}, ${scapingPiecesIndexRecord.center_point_y}, "${scapingPiecesIndexRecord.geojson_coordinates}", "${scapingPiecesIndexRecord.method}");`;
@@ -82,6 +83,15 @@ module.exports = class MysqlDataAccess {
         //console.log(sql);
         return await this.runQuery(sql);
     }
+
+
+    async getGeographicDataMunicipio(cityName){
+        const sql = `select ROUND(LONGITUD_ETRS89,5) as longitud, ROUND(LATITUD_ETRS89,5) as latitud, ROUND(PERIMETRO,5) as perimetro from GEOMETRY_MUNICIPIOS
+        where NOMBRE_ACTUAL = "${cityName}"`;
+        const result = await this.runQuery(sql);
+        return result[0];
+    }
+
     async getNextPieceToScrap(device_id) {
         const sql = `select * from scraping_pieces_index where scraped = false and device_id = "${device_id}" order by piece_id asc limit 1;`;
         const result = await this.runQuery(sql);

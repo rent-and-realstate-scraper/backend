@@ -1,5 +1,5 @@
 
-const ExtractBoundingBoxScraper = require('./ExtractBoundingBoxApi')
+const ExtractBoundingBox = require('./ExtractBoundingBoxDB')
 //const ScraperDataAccess = require('./ScraperDataAccess');
 const ScraperDataAccess = require('../managers/MysqlDataAccess');
 
@@ -11,7 +11,7 @@ module.exports = class ScrapingIndexCreator {
         this.configPath = configPath;
         this.config = require(this.configPath);
         this.cities = require(this.citiesPath).cities;
-        this.scraper = new ExtractBoundingBoxScraper();
+        this.scraper = new ExtractBoundingBox();
         this.db = new ScraperDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USER"],
             process.env["MYSQL_PASSWORD"], process.env["MYSQL_DATABASE"], sqlCreationPath);
 
@@ -37,12 +37,12 @@ module.exports = class ScrapingIndexCreator {
         this.scrapingIndex = []
 
         for (const cityName of this.cities) {
+            console.log("initalizing scraping index for " + cityName);
             const boundingBox = await this.scraper.extractBoundingBoxFromCityName(cityName);
             const boxSize = Math.min(parseFloat(-boundingBox[0][0]) + parseFloat(boundingBox[1][0]), parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]));
 
             const distX = parseFloat(boundingBox[1][0]) - parseFloat(boundingBox[0][0]);
             const distY = parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]);
-
 
             console.log(boxSize);
 
