@@ -27,12 +27,12 @@ module.exports = class ExtractBoundingBox {
 
     // check https://stackoverflow.com/questions/1253499/simple-calculations-for-working-with-lat-lon-km-distance
     convertKilometersIntoLatitudeDegrees(m){
-        return m * 0.2/ 110000;
+        return m * 0.16/ 110000;
     }
 
     convertKilometersIntoLongitudeDegrees(m, longitude){
         const cos = Math.abs(Math.cos(longitude));
-        return m * 0.2 / (111000);
+        return m * 0.3 / (111000);
     }
 
 }
