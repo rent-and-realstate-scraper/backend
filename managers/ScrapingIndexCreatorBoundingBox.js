@@ -1,12 +1,12 @@
 
-const ExtractBoundingBox = require('./ExtractBoundingBoxDB')
+const ExtractBoundingBox = require('./ExtractBoundingBoxDB');
 //const ScraperDataAccess = require('./ScraperDataAccess');
-const ScraperDataAccess = require('../managers/MysqlDataAccess');
+const ScraperDataAccess = require('./MysqlDataAccess');
 
 require('dotenv').load();
 
 module.exports = class ScrapingIndexCreator {
-    constructor(citiesPath = './config/cities.json', configPath = './config/scrapingConfig.json', sqlCreationPath = "./initialize.sql") {
+    constructor(citiesPath = '../scripts/config/cities.json', configPath = '../scripts/config/scrapingConfig.json', sqlCreationPath = "../scripts/initialize.sql") {
         this.citiesPath = citiesPath;
         this.configPath = configPath;
         this.config = require(this.configPath);
@@ -21,9 +21,15 @@ module.exports = class ScrapingIndexCreator {
 
     }
 
-    async regenerateScrapingIndex() {
+    async regenerateScrapingIndex(){
+        for (const device of this.config.devices){
+            await this.regenerateScrapingIndexForDevice(device);
+        }
+    }
+
+    async regenerateScrapingIndexForDevice(device) {
         try {
-            await this.db.dropIndex(this.config.deviceId);
+            await this.db.dropIndex(device.deviceId);
         } catch (err) {
             console.log(err);
         }
@@ -32,9 +38,6 @@ module.exports = class ScrapingIndexCreator {
         } catch (err) {
             console.log(err);
         }
-
-
-        this.scrapingIndex = []
 
         for (const cityName of this.cities) {
             console.log("initalizing scraping index for " + cityName);
@@ -55,27 +58,25 @@ module.exports = class ScrapingIndexCreator {
 
                 for (const pieceName in childrenSmallBoxes) {
                     console.log(pieceName);
-                    const pieceId = cityName + "--" + pieceName + "--" + this.config.deviceId;
+                    const pieceId = cityName + "--" + pieceName + "--" + device.deviceId;
                     const boundingBox = childrenSmallBoxes[pieceName].boundingBox;
                     const centerPoint = this.getCenterPoint(boundingBox);
 
 
                     const record = {
                         piece_id: pieceId, piece_name: pieceName,
-                        city_name: cityName, device_id: this.config.deviceId,
+                        city_name: cityName, device_id: device.deviceId,
                         scraped: false,
                         bounding_box1_x: boundingBox[0][0], bounding_box1_y: boundingBox[0][1],
                         bounding_box2_x: boundingBox[1][0], bounding_box2_y: boundingBox[1][1],
                         center_point_x: centerPoint[0],
-                        center_point_y: centerPoint[1], method: "boundingBox"
+                        center_point_y: centerPoint[1], method: device.method
                     }
-                    this.scrapingIndex.push(record);
                     await this.db.saveScrapingPiecesIndex(record);
 
                 }
             }
         }
-        console.log(this.scrapingIndex);
     }
 
 

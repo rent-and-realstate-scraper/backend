@@ -1,5 +1,5 @@
 const chai = require('chai');
-const FeatureProcessorCityBoundingBox = require('../scripts/ScrapingIndexCreatorBoundingBox');
+const FeatureProcessorCityBoundingBox = require('../managers/ScrapingIndexCreatorBoundingBox');
 const assert = chai.assert;
 const chaiAlmost = require('chai-almost');
 chai.use(chaiAlmost(0.01));

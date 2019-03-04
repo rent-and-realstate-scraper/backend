@@ -1,5 +1,5 @@
 const chai = require('chai');
-const ExtractBoundingBox = require('../scripts/ExtractBoundingBoxDB');
+const ExtractBoundingBox = require('../managers/ExtractBoundingBoxDB');
 const assert = chai.assert;
 const cities = require("../scripts/config/cities.json").cities;
 const expect = chai.expect;

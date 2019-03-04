@@ -1,6 +1,6 @@
 const convert = require('xml-js');
 const axios = require('axios');
-const ScraperDataAccess = require('../managers/MysqlDataAccess');
+const ScraperDataAccess = require('./MysqlDataAccess');
 
 module.exports = class ExtractBoundingBox {
     constructor() {

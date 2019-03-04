@@ -1,6 +1,6 @@
-const ScrapingIndexCreator = require('./ScrapingIndexCreatorBoundingBox');
+const ScrapingIndexCreator = require('../managers/ScrapingIndexCreatorBoundingBox');
 
-const creator = new ScrapingIndexCreator('./config/cities.json', "./config/scrapingConfig.json", "./initialize.sql");
+const creator = new ScrapingIndexCreator();
 
 (async () => {
     await creator.regenerateScrapingIndex();
