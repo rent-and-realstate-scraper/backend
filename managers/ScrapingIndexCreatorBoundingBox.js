@@ -37,42 +37,43 @@ module.exports = class ScrapingIndexCreator {
             console.log(err);
         }
 
-        for (const cityName of this.cities) {
-            console.log("initalizing scraping index for " + cityName);
-            const boundingBox = await this.scraper.extractBoundingBoxFromCityName(cityName);
-            const boxSize = Math.min(parseFloat(-boundingBox[0][0]) + parseFloat(boundingBox[1][0]), parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]));
+        await Promise.all(this.cities.map(async city => await this.populateIndexForCity(city,device)));
 
-            const distX = parseFloat(boundingBox[1][0]) - parseFloat(boundingBox[0][0]);
-            const distY = parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]);
+    }
 
-            console.log(boxSize);
+    async populateIndexForCity(cityName, device){
+        console.log("initalizing scraping index for " + cityName);
+        const boundingBox = await this.scraper.extractBoundingBoxFromCityName(cityName);
+        const boxSize = Math.min(parseFloat(-boundingBox[0][0]) + parseFloat(boundingBox[1][0]), parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]));
 
-            if ((distX) > 0) {
-                console.log("generating index and pieces");
-                let lengthX = this.calculateNumberRows(distX)
-                let lengthY = this.calculateNumberRows(distY)
+        const distX = parseFloat(boundingBox[1][0]) - parseFloat(boundingBox[0][0]);
+        const distY = parseFloat(boundingBox[0][1]) - parseFloat(boundingBox[1][1]);
 
-                const childrenSmallBoxes = this.popullateBoundingBoxWithPieces(boundingBox, distX, distY, lengthX, lengthY)
+        console.log(boxSize);
 
-                for (const pieceName in childrenSmallBoxes) {
-                    console.log(pieceName);
-                    const pieceId = cityName + "--" + pieceName + "--" + device.deviceId;
-                    const boundingBox = childrenSmallBoxes[pieceName].boundingBox;
-                    const centerPoint = this.getCenterPoint(boundingBox);
+        if ((distX) > 0) {
+            console.log("generating index and pieces");
+            let lengthX = this.calculateNumberRows(distX);
+            let lengthY = this.calculateNumberRows(distY);
 
+            const childrenSmallBoxes = this.popullateBoundingBoxWithPieces(boundingBox, distX, distY, lengthX, lengthY);
 
-                    const record = {
-                        piece_id: pieceId, piece_name: pieceName,
-                        city_name: cityName, device_id: device.deviceId,
-                        scraped: false,
-                        bounding_box1_x: boundingBox[0][0], bounding_box1_y: boundingBox[0][1],
-                        bounding_box2_x: boundingBox[1][0], bounding_box2_y: boundingBox[1][1],
-                        center_point_x: centerPoint[0],
-                        center_point_y: centerPoint[1], method: device.method
-                    }
-                    await this.db.saveScrapingPiecesIndex(record);
+            for (const pieceName in childrenSmallBoxes) {
+                const pieceId = cityName + "--" + pieceName + "--" + device.deviceId;
+                console.log(pieceId);
+                const boundingBox = childrenSmallBoxes[pieceName].boundingBox;
+                const centerPoint = this.getCenterPoint(boundingBox);
 
+                const record = {
+                    piece_id: pieceId, piece_name: pieceName,
+                    city_name: cityName, device_id: device.deviceId,
+                    scraped: false,
+                    bounding_box1_x: boundingBox[0][0], bounding_box1_y: boundingBox[0][1],
+                    bounding_box2_x: boundingBox[1][0], bounding_box2_y: boundingBox[1][1],
+                    center_point_x: centerPoint[0],
+                    center_point_y: centerPoint[1], method: device.method
                 }
+                await this.db.saveScrapingPiecesIndex(record);
             }
         }
     }
