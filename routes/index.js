@@ -1,8 +1,7 @@
 // combine routes
-const route1 = require('./route1');
 const route2 = require('./route2');
-
+const scrapingResultsProcess = require('./scrapingResultsProcess');
 module.exports= (server) => {
-  route1(server);
   route2(server);
+  scrapingResultsProcess(server);
 };

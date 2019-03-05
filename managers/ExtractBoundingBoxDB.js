@@ -11,12 +11,7 @@ module.exports = class ExtractBoundingBox {
     async extractBoundingBoxFromCityName(cityname) {
         try{
             const geoData = await this.db.getGeographicDataMunicipio(cityname);
-            const longitude = geoData["longitud"];
-            const latitude = geoData["latitud"];
-            const perimeterLat = this.convertKilometersIntoLatitudeDegrees(geoData["perimetro"]);
-            const perimeterLon = this.convertKilometersIntoLongitudeDegrees(geoData["perimetro"],longitude);
-
-            const result =  [[longitude - perimeterLon/2, latitude + perimeterLat/2], [longitude + perimeterLon/2, latitude - perimeterLat/2]];
+            const result =  [[geoData.bounding_box1_x, geoData.bounding_box1_y], [geoData.bounding_box2_x, geoData.bounding_box2_y]];
             return result;
         } catch (e) {
             console.log(e);

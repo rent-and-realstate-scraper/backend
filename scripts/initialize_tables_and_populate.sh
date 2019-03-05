@@ -1,5 +1,5 @@
 echo "creating tables for geographical data";
-node initializeAndPopulateTablesGeometryMunicipio.js ;
+node initializeAndPopulateTablesGeometryMunicipioIGE.js ;
 
 echo "creating tables for scraping index";
 node initializeAndPopulateScrapingIndex.js ;

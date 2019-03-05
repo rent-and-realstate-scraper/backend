@@ -85,9 +85,16 @@ module.exports = class MysqlDataAccess {
     }
 
 
-    async getGeographicDataMunicipio(cityName){
-        const sql = `select ROUND(LONGITUD_ETRS89,5) as longitud, ROUND(LATITUD_ETRS89,5) as latitud, ROUND(PERIMETRO,5) as perimetro from GEOMETRY_MUNICIPIOS
+    async getGeographicDataMunicipioIGN(cityName){
+        const sql = `select ROUND(LONGITUD_ETRS89,5) as longitud, ROUND(LATITUD_ETRS89,5) as latitud, ROUND(PERIMETRO,5) as perimetro from GEOMETRY_MUNICIPIOS_IGN
         where NOMBRE_ACTUAL = "${cityName}"`;
+        const result = await this.runQuery(sql);
+        return result[0];
+    }
+
+    async getGeographicDataMunicipio(cityName){
+        const sql = `select * from GEOMETRY_MUNICIPIOS_OPENDATASOFT
+        where municipio = "${cityName}"`;
         const result = await this.runQuery(sql);
         return result[0];
     }
@@ -117,6 +124,18 @@ module.exports = class MysqlDataAccess {
             return null;
         }
 
+    }
+
+    async getScrapedCount(device_id, scraped) {
+        const sql = `select count(*) from scraping_pieces_index 
+        where scraped=${scraped} and  
+        device_id = "${device_id}";`
+        try {
+            const result = await this.runQuery(sql);
+            return parseInt(result[0]["count(*)"]);
+        } catch (err) {
+            return null;
+        }
     }
 
     async getScrapedCities(scraping_id) {
