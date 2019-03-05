@@ -23,7 +23,7 @@ ORIGENCOOR           TEXT,
 ALTITUD              TEXT,
 ORIGENALTITUD        TEXT);
 
-LOAD DATA LOCAL INFILE 'data/municipios_geo_data_nomenclator.csv'
+LOAD DATA LOCAL INFILE 'scripts/data/municipios_geo_data_nomenclator.csv'
 INTO TABLE GEOMETRY_MUNICIPIOS_IGN
 CHARACTER SET 'utf8'
 COLUMNS TERMINATED BY ','
