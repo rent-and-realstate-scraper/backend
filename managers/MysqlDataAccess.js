@@ -2,7 +2,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 
 module.exports = class MysqlDataAccess {
-    constructor(mysqlHost, mysqlUser, mysqlPassword, mysqlDatabase, sqlCreationPath = "scripts/initalize.sql") {
+    constructor(mysqlHost, mysqlUser, mysqlPassword, mysqlDatabase, sqlCreationPath = "../scripts/initalize.sql") {
         this.mysqlHost = mysqlHost;
         this.mysqlUser = mysqlUser;
         this.mysqlPassword = mysqlPassword;

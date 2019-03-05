@@ -11,7 +11,7 @@ bounding_box1_y        TEXT,
 bounding_box2_x        TEXT,
 bounding_box2_y        TEXT);
 
-LOAD DATA LOCAL INFILE 'scripts/data/opensoft-espana-municipios-processed.csv'
+LOAD DATA LOCAL INFILE 'data/opensoft-espana-municipios-processed.csv'
 INTO TABLE GEOMETRY_MUNICIPIOS_OPENDATASOFT
 CHARACTER SET 'utf8'
 COLUMNS TERMINATED BY ','
