@@ -119,8 +119,9 @@ module.exports = class MysqlDataAccess {
         let result;
         try {
             result = await this.runQuery(sql);
-            return parseInt(result[0]["count(*)"]);
+            return result[0]["count(*)"];
         } catch (err) {
+            console.log(err);
             return null;
         }
 
