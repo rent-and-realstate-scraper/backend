@@ -1,3 +1,4 @@
+cp .env scripts/.env
 cd scripts;
 
 echo "creating tables for geodata";
