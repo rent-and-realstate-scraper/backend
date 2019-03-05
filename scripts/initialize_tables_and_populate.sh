@@ -1,6 +1,6 @@
 echo "creating tables for geodata";
-node initializeAndPopulateTablesGeometryMunicipioOpendatasoft.js;
+node scripts/initializeAndPopulateTablesGeometryMunicipioOpendatasoft.js;
 
 echo "creating tables for scraping index";
-node initializeAndPopulateScrapingIndex.js ;
+node scripts/initializeAndPopulateScrapingIndex.js ;
 
