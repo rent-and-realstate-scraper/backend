@@ -4,8 +4,7 @@ const ScraperDataAccess = require('./MysqlDataAccess');
 
 module.exports = class ExtractBoundingBox {
     constructor() {
-        this.db = new ScraperDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USER"],
-            process.env["MYSQL_PASSWORD"], process.env["MYSQL_DATABASE"]);
+        this.db = new ScraperDataAccess();
     }
 
     async extractBoundingBoxFromCityName(cityname) {
