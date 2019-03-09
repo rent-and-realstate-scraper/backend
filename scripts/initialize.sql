@@ -39,6 +39,14 @@ CREATE TABLE IF NOT EXISTS scraping_execution_log (scraping_id VARCHAR(150) not 
                                 last_piece VARCHAR(150) not null references scraping_results(piece_id),
                                 last_result VARCHAR(150) not null references scraping_results(result_id)
                                 );
+
+drop table if exists completed_revised_executions;
+
+CREATE TABLE IF NOT EXISTS completed_revised_executions (scraping_id VARCHAR(150) references scraping_execution_log(scraping_id),
+                                completed boolean not null,
+                                revised boolean,
+                                revised_date datetime
+                                );
                                 
 -- data input mocked
  

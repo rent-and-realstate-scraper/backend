@@ -104,6 +104,20 @@ module.exports = class MysqlDataAccess {
         const result = await this.runQuery(sql);
         return result[0];
     }
+
+    async getApprovedAndRevisedExecutions() {
+        const sql = `select * from completed_revised_executions order by revised_date desc limit 100;`;
+        const result = await this.runQuery(sql);
+        return result[0];
+    }
+
+    async setApprovedExecution(scrapping_id, completed, revised) {
+        const sql = `replace into completed_revised_executions (scraping_id, completed, revised, revised_date) 
+        values ("${scrapping_id}", ${completed}, ${revised}, sysdate());
+`;
+        return await this.runQuery(sql);
+    }
+
     async setIndexAsNotScraped(device_id) {
         const sql = `update scraping_pieces_index set scraped = false where device_id = "${device_id}";`;
         return await this.runQuery(sql);
