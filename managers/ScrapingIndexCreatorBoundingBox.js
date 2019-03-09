@@ -1,7 +1,7 @@
 
 const ExtractBoundingBox = require('./ExtractBoundingBoxDB');
 //const ScraperDataAccess = require('./ScraperDataAccess');
-const ScraperDataAccess = require('./MysqlDataAccess');
+const ScraperDataAccess = require('./MysqlDataAccessForWorkers');
 
 require('dotenv').load();
 

@@ -1,4 +1,4 @@
-const MysqlDataAccess = require("../managers/MysqlDataAccess");
+const MysqlDataAccess = require("../managers/MysqlDataAccessForWorkers");
 const get = require('lodash').get;
 require('dotenv').load();
 const db = new MysqlDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USER"], process.env["MYSQL_PASSWORD"], process.env["MYSQL_DATABASE"]);
@@ -136,9 +136,6 @@ const routes= (server) => {
             next();
         }
     });
-
-
-
 };
 
 module.exports = routes;

@@ -1,4 +1,4 @@
-const MysqlDataAccess = require("../managers/MysqlDataAccess");
+const MysqlDataAccess = require("../managers/MysqlDataAccessForApi");
 const GeoJsonGeneratorFromBoundingBox = require("../managers/GeoJsonGeneratorFromBoundingBox");
 const get = require('lodash').get;
 const geoJsonGeneratorBoundingBox = new GeoJsonGeneratorFromBoundingBox();

@@ -1,4 +1,4 @@
-const DataAccess = require('../managers/MysqlDataAccess');
+const DataAccess = require('../managers/MysqlDataAccessForWorkers');
 
 const fs = require('fs');
 
