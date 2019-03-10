@@ -1,6 +1,8 @@
 const restify = require('restify');
 const routes = require("./routes");
 const morgan  = require('morgan');
+const mongoose = require('mongoose');
+
 require('dotenv').load();
 const corsMiddleware = require('restify-cors-middleware')
 
@@ -21,6 +23,12 @@ server.use(restify.plugins.bodyParser({
         mapParams: true
     }));
 server.use(restify.plugins.acceptParser(server.acceptable));
+
+
+mongoUrl = process.env['MONGODB_URL']
+mongoose.connect(mongoUrl, { promiseLibrary: require('bluebird') })
+    .then(() => console.log('connection succesful'))
+    .catch((err) => console.error(err));
 
 routes(server);
 

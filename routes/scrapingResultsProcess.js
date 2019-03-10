@@ -1,7 +1,9 @@
 const MysqlDataAccess = require("../managers/MysqlDataAccessForApi");
-const GeoJsonGeneratorFromBoundingBox = require("../managers/GeoJsonGeneratorFromBoundingBox");
 const get = require('lodash').get;
+const GeoJsonGeneratorFromBoundingBox = require("../managers/GeoJsonGeneratorFromBoundingBox");
 const geoJsonGeneratorBoundingBox = new GeoJsonGeneratorFromBoundingBox();
+const IntervalExtremeValuesCalculator = require('../managers/IntervalExtremeValuesCalculator');
+const intervalCalculator = new IntervalExtremeValuesCalculator();
 
 require('dotenv').load();
 
@@ -14,8 +16,10 @@ const routes= (server) => {
         const scrapingId = get(req.query, 'scraping_id');
         const result = await db.getScrapingResultsCity(city, scrapingId);
         console.log(result);
-        let geoJson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
-        res.send(geoJson);
+        let geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
+        let intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
+        console.log(intervals);
+        res.send({intervals,geojson});
         return next();
     });
     

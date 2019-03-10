@@ -78,8 +78,8 @@ module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
 
     }
 
-    async updateGeoJsonField(geojson_coordinates, piece_id) {
-        const sql = `update scraping_pieces_index set geojson_coordinates="${geojson_coordinates}", method="cusec" where piece_id = "${piece_id}"`;
+    async updateGeoJsonField(geojson_coordinates, piece_id, method ="cusec") {
+        const sql = `update scraping_pieces_index set geojson_coordinates="${geojson_coordinates}", method="${method}" where piece_id = "${piece_id}"`;
         const result = await this.runQuery(sql);
         return result;
     }
