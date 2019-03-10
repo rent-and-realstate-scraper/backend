@@ -15,10 +15,12 @@ const routes= (server) => {
         const city = get(req.query, 'city');
         const scrapingId = get(req.query, 'scraping_id');
         const result = await db.getScrapingResultsCity(city, scrapingId);
-        console.log(result);
-        let geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
-        let intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
-        console.log(intervals);
+        let geojson;
+        let intervals;
+        if (result) {
+            geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
+            intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
+        }
         res.send({intervals,geojson});
         return next();
     });
@@ -28,9 +30,13 @@ const routes= (server) => {
             const app_id = get(req.query, 'app_id');
             const method = get(req.query, 'method');
             const result = await db.getScrapingResultsCityFromLastApprovedId(city,app_id,method);
-            let geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
-            let intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
-            console.log(intervals);
+            let geojson;
+            let intervals;
+            console.log(result);
+            if (result){
+                geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
+                intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
+            }
             res.send({intervals,geojson});
             return next();
         });

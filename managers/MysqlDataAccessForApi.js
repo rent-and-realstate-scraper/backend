@@ -59,8 +59,9 @@ module.exports = class MysqlDataAccessForApi extends MysqlDataAccess{
                         group by i.city_name
                         order by revised_date desc limit 1);
         `
+        console.log(sql);
         const result = await this.runQuery(sql);
-        return result;
+        return result[1];
     }
 
     async getApprovedAndRevisedExecutions() {
