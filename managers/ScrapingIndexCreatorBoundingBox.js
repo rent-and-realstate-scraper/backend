@@ -37,6 +37,12 @@ module.exports = class ScrapingIndexCreator {
             console.log(err);
         }
 
+        if (device.cities) {
+            this.cities = device.cities;}
+        else {
+            this.cities = require(this.citiesPath).cities;
+        }
+
         await Promise.all(this.cities.map(async city => await this.populateIndexForCity(city,device)));
 
     }

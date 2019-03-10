@@ -65,9 +65,16 @@ const routes= (server) => {
 
     server.del('/api/workers/regenerate_scraping_index', async (req, res, next) => {
         const deviceId = get(req.query, 'device_id');
+        const method = get(req.query, 'method') || "boundingBox";
+        let cities = get(req.query, 'cities');
+        if (cities) cities = cities.split(";");
+
         try {
             console.log(deviceId);
-            const device = {deviceId, method:"boundingBox"};
+            console.log(method);
+            console.log(cities);
+
+            const device = {deviceId, method,cities};
             await indexCreator.regenerateScrapingIndexForDevice(device);
             res.send({message:"scraping_index_regenerated"});
             next();
