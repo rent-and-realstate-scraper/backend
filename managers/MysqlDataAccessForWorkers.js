@@ -1,12 +1,11 @@
 const fs = require('fs');
 const MysqlDataAccess = require("./MysqlDataAccess");
 module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
-    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"], sqlCreationPath = "./scripts/initalize.sql") {
-        super(mysqlHost,mysqlUser,mysqlPassword,mysqlDatabase,sqlCreationPath);
+    constructor(mysqlHost , mysqlUser, mysqlPassword , mysqlDatabase) {
+        super(mysqlHost,mysqlUser,mysqlPassword,mysqlDatabase);
     }
     async createTables() {
-        const script = fs.readFileSync(this.tableCreatorScriptPath, 'utf8');
-        await this.runQuery(script);
+        await this.runQuery(this.script);
     }
     async saveExecutionLog(executionLogRecord) {
         const sql = `REPLACE INTO scraping_execution_log(scraping_id, last_piece, last_result) 
@@ -23,6 +22,7 @@ module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
     }
 
     async saveScrapingResults(scapingResultsRecord) {
+        console.log(scapingResultsRecord);
         const sql = `REPLACE INTO scraping_results(result_id, piece_id, scraping_id, app_id, device_id, date_scraped, average_prize_buy, number_of_ads_buy, average_prize_rent, number_of_ads_rent, extra_data) values( "${scapingResultsRecord.result_id}", "${scapingResultsRecord.piece_id}",  "${scapingResultsRecord.scraping_id}", "${scapingResultsRecord.app_id}", "${scapingResultsRecord.device_id}", sysdate(),${scapingResultsRecord.average_prize_buy}, ${scapingResultsRecord.number_of_ads_buy},${scapingResultsRecord.average_prize_rent}, ${scapingResultsRecord.number_of_ads_rent}, "${scapingResultsRecord.extra_data}");`
         return await this.runQuery(sql);
     }

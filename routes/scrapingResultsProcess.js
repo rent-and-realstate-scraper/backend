@@ -11,7 +11,7 @@ const db = new MysqlDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USE
 
 
 const routes= (server) => {
-    server.get('/api/scraping_results/geojson', async (req, res, next) => {
+    server.get('/api/scraping_results/results', async (req, res, next) => {
         const city = get(req.query, 'city');
         const scrapingId = get(req.query, 'scraping_id');
         const result = await db.getScrapingResultsCity(city, scrapingId);
@@ -22,14 +22,18 @@ const routes= (server) => {
         res.send({intervals,geojson});
         return next();
     });
-    
-    server.get('/api/scraping_results/results', async (req, res, next) => {
-        const city = get(req.query, 'city');
-        const scrapingId = get(req.query, 'scraping_id');
-        const result = await db.getScrapingResultsCity(city, scrapingId);
-        res.send(result);
-        return next();
-    });
+
+        server.get('/api/scraping_results_approved/results', async (req, res, next) => {
+            const city = get(req.query, 'city');
+            const app_id = get(req.query, 'app_id');
+            const method = get(req.query, 'method');
+            const result = await db.getScrapingResultsCityFromLastApprovedId(city,app_id,method);
+            let geojson = geoJsonGeneratorBoundingBox.generateGeoJsonFromResult(result);
+            let intervals = intervalCalculator.calculateIntervalsExtremeValues(result);
+            console.log(intervals);
+            res.send({intervals,geojson});
+            return next();
+        });
 
     server.get('/api/scraping_results/scraped_cities', async (req, res, next) => {
         const scrapingId = get(req.query, 'scraping_id');

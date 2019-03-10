@@ -12,8 +12,7 @@ module.exports = class ScrapingIndexCreator {
         this.config = require(this.configPath);
         this.cities = require(this.citiesPath).cities;
         this.scraper = new ExtractBoundingBox();
-        this.db = new ScraperDataAccess(process.env["MYSQL_HOST"], process.env["MYSQL_USER"],
-            process.env["MYSQL_PASSWORD"], process.env["MYSQL_DATABASE"], sqlCreationPath);
+        this.db = new ScraperDataAccess();
 
         this.maxSize = 0.005;
         this.maxNumberRows = 65; // aprox Math.sqrt(1000);
@@ -27,14 +26,17 @@ module.exports = class ScrapingIndexCreator {
 
     async regenerateScrapingIndexForDevice(device) {
         try {
+            console.log("removing old data for tables");
             await this.db.dropIndex(device.deviceId);
         } catch (err) {
             console.log(err);
         }
         try {
+            console.log("creating tables");
             await this.db.createTables();
         } catch (err) {
             console.log(err);
+            throw  err;
         }
 
         if (device.cities) {

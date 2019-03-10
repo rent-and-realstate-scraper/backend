@@ -2,8 +2,8 @@ const fs = require('fs');
 const mysql = require('mysql');
 const MysqlDataAccess = require("./MysqlDataAccess");
 module.exports = class MysqlDataAccessForApi extends MysqlDataAccess{
-    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"], sqlCreationPath = "../scripts/initalize.sql") {
-        super(mysqlHost,mysqlUser,mysqlPassword,mysqlDatabase,sqlCreationPath);
+    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"]) {
+        super(mysqlHost,mysqlUser,mysqlPassword,mysqlDatabase);
     }
 
     //select device_id from scraping_pieces_index group by device_id;

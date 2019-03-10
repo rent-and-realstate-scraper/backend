@@ -70,10 +70,6 @@ const routes= (server) => {
         if (cities) cities = cities.split(";");
 
         try {
-            console.log(deviceId);
-            console.log(method);
-            console.log(cities);
-
             const device = {deviceId, method,cities};
             await indexCreator.regenerateScrapingIndexForDevice(device);
             res.send({message:"scraping_index_regenerated"});

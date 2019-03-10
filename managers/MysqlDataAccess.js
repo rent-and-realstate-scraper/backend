@@ -2,7 +2,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 
 module.exports = class MysqlDataAccess {
-    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"], sqlCreationPath = "./scripts/initalize.sql") {
+    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"]) {
         this.mysqlHost = mysqlHost;
         this.mysqlUser = mysqlUser;
         this.mysqlPassword = mysqlPassword;
@@ -10,7 +10,15 @@ module.exports = class MysqlDataAccess {
         this.multipleStatements = true;
 
         this.connection = null;
-        this.tableCreatorScriptPath = sqlCreationPath;
+        try{
+            this.script = fs.readFileSync("../scripts/initialize.sql", 'utf8');
+        } catch (e) {
+            try{
+                this.script = fs.readFileSync("./scripts/initialize.sql", 'utf8');
+            } catch (e) {
+                console.log(e);
+            }
+        }
         this.createConnection();
     }
 
