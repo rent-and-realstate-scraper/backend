@@ -7,9 +7,10 @@ require('dotenv').load();
 const corsMiddleware = require('restify-cors-middleware')
 
 const cors = corsMiddleware({
-    origins: ["http://localhost:3001"],
-    allowHeaders: ['API-Token'],
-    exposeHeaders: ['API-Token-Expiry']
+    preflightMaxAge: 5,
+    origins: ['*'],
+    allowHeaders: ['*','token'],
+    exposeHeaders: ['*','token']
 });
 
 const server = restify.createServer({ name: 'api' });
