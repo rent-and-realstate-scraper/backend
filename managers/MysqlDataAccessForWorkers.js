@@ -1,7 +1,7 @@
 const fs = require('fs');
 const MysqlDataAccess = require("./MysqlDataAccess");
 module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
-    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"], sqlCreationPath = "../scripts/initalize.sql") {
+    constructor(mysqlHost = process.env["MYSQL_HOST"], mysqlUser = process.env["MYSQL_USER"], mysqlPassword = process.env["MYSQL_PASSWORD"], mysqlDatabase = process.env["MYSQL_DATABASE"], sqlCreationPath = "./scripts/initalize.sql") {
         super(mysqlHost,mysqlUser,mysqlPassword,mysqlDatabase,sqlCreationPath);
     }
     async createTables() {

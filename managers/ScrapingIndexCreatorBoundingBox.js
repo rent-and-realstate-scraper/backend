@@ -6,7 +6,7 @@ const ScraperDataAccess = require('./MysqlDataAccessForWorkers');
 require('dotenv').load();
 
 module.exports = class ScrapingIndexCreator {
-    constructor(citiesPath = '../scripts/config/cities.json', configPath = '../scripts/config/scrapingConfig.json', sqlCreationPath = "../scripts/initialize.sql") {
+    constructor(citiesPath = '../scripts/config/cities.json', configPath = '../scripts/config/scrapingConfig.json', sqlCreationPath = "./scripts/initialize.sql") {
         this.citiesPath = citiesPath;
         this.configPath = configPath;
         this.config = require(this.configPath);
