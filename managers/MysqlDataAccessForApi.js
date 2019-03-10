@@ -34,7 +34,8 @@ module.exports = class MysqlDataAccessForApi extends MysqlDataAccess{
         return result;
     }
 
-    async getScrapingResultsCityFromLastApprovedId(city_name, app_id="airbnb") {
+    async getScrapingResultsCityFromLastApprovedId(city_name, app_id="fotocasa", method="boundingBox") {
+        /*
         const sql = `select t.*, s.* from scraping_results t ,scraping_pieces_index s where
         t.piece_id = s.piece_id and 
         t.scraping_id = (select c.scraping_id from completed_revised_executions c, scraping_results s
@@ -43,6 +44,21 @@ module.exports = class MysqlDataAccessForApi extends MysqlDataAccess{
                         and s.app_id = "${app_id}"
                         order by revised_date desc limit 1)
         and s.city_name = "${city_name}";`;
+        */
+        const sql = `
+        SET sql_mode = '';        
+        select t.*, s.* from scraping_results t ,scraping_pieces_index s, completed_revised_executions c where
+        t.piece_id = s.piece_id and 
+        t.scraping_id = (select c.scraping_id from completed_revised_executions c, scraping_results s, scraping_pieces_index i
+						where c.revised=true
+                        and s.scraping_id = c.scraping_id
+                        and i.piece_id = s.piece_id
+                        and s.app_id ="${app_id}"
+                        and i.method = "${method}"
+                        and i.city_name="${city_name}"
+                        group by i.city_name
+                        order by revised_date desc limit 1);
+        `
         const result = await this.runQuery(sql);
         return result;
     }
