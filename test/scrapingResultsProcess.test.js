@@ -82,4 +82,16 @@ describe('App', () => {
                 });
         });
     });
+
+    describe('/api/scraping_results/scraping_execution_log', () => {
+        it('responds with status 200 and contains data', function (done) {
+            chai.request(server)
+                .get('/api/scraping_results/scraping_execution_log?limit=10&offset=0&order=desc')
+                .end(function (err, res) {
+                    console.log(res.body);
+                    expect(res).to.have.status(200);
+                    done();
+                });
+        });
+    });
 });

@@ -92,6 +92,15 @@ const routes= (server) => {
         return next();
     });
 
+    server.get('/api/scraping_results/scraping_execution_log', async (req, res, next) => {
+        const limit = get(req.query, 'limit') || 100;
+        const offset = get(req.query, 'offset') || 0;
+        const order = get(req.query, 'order');
+        const result = await db.getScrapingExecutionLog(limit,offset,order);
+        res.send(result);
+        return next();
+    });
+
 };
 
 module.exports = routes;
