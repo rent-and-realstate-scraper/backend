@@ -46,6 +46,7 @@ module.exports = class ScrapingIndexCreator {
         }
         await this.db.saveRegisteredDevice(device);
         await Promise.all( this.cities.map((city)=>{
+            city = city.toLowerCase();
             const cityObj = {city,device_id:device.device_id};
             console.log("registering city ")
             console.log(city);
