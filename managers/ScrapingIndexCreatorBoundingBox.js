@@ -27,7 +27,7 @@ module.exports = class ScrapingIndexCreator {
     async regenerateScrapingIndexForDevice(device) {
         try {
             console.log("removing old data for tables");
-            await this.db.dropIndex(device.deviceId);
+            await this.db.dropIndex(device.device_id);
         } catch (err) {
             console.log(err);
         }
@@ -44,6 +44,13 @@ module.exports = class ScrapingIndexCreator {
         else {
             this.cities = require(this.citiesPath).cities;
         }
+        await this.db.saveRegisteredDevice(device);
+        await Promise.all( this.cities.map((city)=>{
+            const cityObj = {city,device_id:device.device_id};
+            console.log("registering city ")
+            console.log(city);
+            return this.db.saveRegisteredCity(cityObj);
+        }))
 
         await Promise.all(this.cities.map(async city => await this.populateIndexForCity(city,device)));
 
@@ -67,14 +74,14 @@ module.exports = class ScrapingIndexCreator {
             const childrenSmallBoxes = this.popullateBoundingBoxWithPieces(boundingBox, distX, distY, lengthX, lengthY);
 
             for (const pieceName in childrenSmallBoxes) {
-                const pieceId = cityName + "--" + pieceName + "--" + device.deviceId;
+                const pieceId = cityName + "--" + pieceName + "--" + device.device_id;
                 console.log(pieceId);
                 const boundingBox = childrenSmallBoxes[pieceName].boundingBox;
                 const centerPoint = this.getCenterPoint(boundingBox);
 
                 const record = {
                     piece_id: pieceId, piece_name: pieceName,
-                    city_name: cityName, device_id: device.deviceId,
+                    city_name: cityName, device_id: device.device_id,
                     scraped: false,
                     bounding_box1_x: boundingBox[0][0], bounding_box1_y: boundingBox[0][1],
                     bounding_box2_x: boundingBox[1][0], bounding_box2_y: boundingBox[1][1],

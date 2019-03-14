@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS scraping_results (
                                 piece_id VARCHAR(150) NOT NULL references scraping_pieces_index(piece_id),
 								scraping_id VARCHAR(150),
                                 app_id VARCHAR(150),
-                                device_id VARCHAR(150),
+                                device_id VARCHAR(150) NOT NULL references devices_registry(device_id),
                                 date_scraped DATETIME,
                                 average_prize_buy FLOAT, 
                                 number_of_ads_buy INT, 
@@ -40,7 +40,18 @@ CREATE TABLE IF NOT EXISTS scraping_execution_log (scraping_id VARCHAR(150) not 
                                 last_result VARCHAR(150) not null references scraping_results(result_id)
                                 );
 
-drop table if exists completed_revised_executions;
+CREATE TABLE IF NOT EXISTS devices_registry(
+    device_id VARCHAR(150) NOT NULL key,
+    date_added DATETIME,
+    app_id VARCHAR(150),
+    method VARCHAR(150)
+    );
+
+CREATE TABLE IF NOT EXISTS cities_registry(
+    device_id VARCHAR(150) key,
+    city VARCHAR(200)
+    );
+-- drop table if exists completed_revised_executions;
 
 CREATE TABLE IF NOT EXISTS completed_revised_executions (scraping_id VARCHAR(150) references scraping_execution_log(scraping_id),
                                 completed boolean not null,

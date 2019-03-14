@@ -22,8 +22,20 @@ module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
     }
 
     async saveScrapingResults(scapingResultsRecord) {
-        console.log(scapingResultsRecord);
         const sql = `REPLACE INTO scraping_results(result_id, piece_id, scraping_id, app_id, device_id, date_scraped, average_prize_buy, number_of_ads_buy, average_prize_rent, number_of_ads_rent, extra_data) values( "${scapingResultsRecord.result_id}", "${scapingResultsRecord.piece_id}",  "${scapingResultsRecord.scraping_id}", "${scapingResultsRecord.app_id}", "${scapingResultsRecord.device_id}", sysdate(),${scapingResultsRecord.average_prize_buy}, ${scapingResultsRecord.number_of_ads_buy},${scapingResultsRecord.average_prize_rent}, ${scapingResultsRecord.number_of_ads_rent}, "${scapingResultsRecord.extra_data}");`
+        return await this.runQuery(sql);
+    }
+
+    async saveRegisteredDevice(device) {
+        const sql = `
+        REPLACE INTO devices_registry (device_id, date_updated, app_id, method) values ("${device.device_id}", sysdate(), "${device.app_id}", "${device.method}");
+        `;
+        return await this.runQuery(sql);
+    }
+    async saveRegisteredCity(city) {
+        const sql = `
+        REPLACE INTO cities_registry (device_id, city) values ("${city.device_id}", "${city.city}");
+        `;
         return await this.runQuery(sql);
     }
 

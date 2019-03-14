@@ -82,6 +82,21 @@ const routes= (server) => {
         }
     });
 
+    server.post('/api/workers/regenerate_scraping_index', async (req, res, next) => {
+        const body = req.params;
+        console.log(body);
+        try {
+            await indexCreator.regenerateScrapingIndexForDevice(body);
+            res.send({message:"scraping_index_regenerated"});
+            next();
+        } catch (e) {
+            console.log(e);
+            res.status(500);
+            res.send({error:e});
+            next();
+        }
+    });
+
     server.del('/api/workers/set_index_as_not_scraped', async (req, res, next) => {
         const deviceId = get(req.query, 'device_id');
         try {
