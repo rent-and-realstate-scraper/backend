@@ -99,14 +99,16 @@ module.exports = class MysqlDataAccessForApi extends MysqlDataAccess{
         }
     }
     async getScrapingExecutionLog(limit, offset, order = "desc") {
-        const sql = `select t.*, r.date_scraped, r.app_id, r.device_id from scraping_execution_log t, scraping_results r 
+        const sql = `set sql_mode ="";
+        select t.*, r.date_scraped, r.app_id, r.device_id from scraping_execution_log t, scraping_results r 
         where t.last_piece = r.piece_id
+        group by r.date_scraped
         order by r.date_scraped ${order}
         limit ${limit}
         offset ${offset};`;
         try {
             const result = await this.runQuery(sql);
-            return result;
+            return result[1];
         } catch (err) {
             console.log(err);
             return null;
