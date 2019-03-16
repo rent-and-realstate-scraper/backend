@@ -28,7 +28,7 @@ module.exports = class MysqlDataAccessForWorkers extends MysqlDataAccess{
 
     async saveRegisteredDevice(device) {
         const sql = `
-        REPLACE INTO devices_registry (device_id, date_updated, app_id, method) values ("${device.device_id}", sysdate(), "${device.app_id}", "${device.method}");
+        REPLACE INTO devices_registry (device_id, date_added, app_id, method) values ("${device.device_id}", sysdate(), "${device.app_id}", "${device.method}");
         `;
         return await this.runQuery(sql);
     }
